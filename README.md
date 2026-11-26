@@ -19,7 +19,6 @@ Game nên để chế độ cửa sổ / borderless, ngôn ngữ tiếng Anh đ�
 
 - App mô phỏng chuột và bàn phím. Dùng macro có thể vi phạm điều khoản của game và có rủi ro bị xử lý tài khoản. Tự chịu trách nhiệm khi dùng.
 - Không đọc hay sửa bộ nhớ/tệp của game. Chỉ gọi API công khai `https://codes.yar.gg/api/codes`.
-- File exe chưa ký số nên Windows Defender/SmartScreen có thể cảnh báo; mã nguồn công khai để bạn tự kiểm tra và tự build.
 
 ## Build
 
