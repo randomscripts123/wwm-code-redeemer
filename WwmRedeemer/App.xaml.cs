@@ -9,6 +9,8 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        Trace.HookGlobalHandlers(this);
+        Trace.Write($"Start v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version} admin={new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent()).IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator)} os={Environment.OSVersion}");
 
         // Che do tu kiem tra (khong mo giao dien): --selftest [--img duong_dan_anh]...
         if (e.Args.Contains("--selftest"))
@@ -19,7 +21,19 @@ public partial class App : Application
             return;
         }
 
-        new MainWindow().Show();
+        try
+        {
+            var w = new MainWindow();
+            Trace.Write("MainWindow created");
+            w.Show();
+            Trace.Write("MainWindow shown");
+        }
+        catch (Exception ex)
+        {
+            Trace.Write("STARTUP FAILED: " + ex);
+            MessageBox.Show(ex.Message + "\n\n" + Path.Combine(AppConfig.DirPath, "app.log"), "WWM Code Redeemer");
+            Shutdown(1);
+        }
     }
 
     private static async Task SelfTestAsync(string[] args)
@@ -42,6 +56,13 @@ public partial class App : Application
                 var btn = Locator.FindExchangeButton(lines, bmp.Width, bmp.Height);
                 var (field, confirm) = Locator.FindDialog(lines, bmp.Width, bmp.Height);
                 sb.AppendLine($"  button={Fmt(btn, bmp)} field={Fmt(field, bmp)} confirm={Fmt(confirm, bmp)} dialogOpen={Locator.DialogOpen(lines)}");
+                var (outcome, msg) = Redeemer.Classify(lines, bmp.Width, bmp.Height);
+                sb.AppendLine($"  classify={outcome} msg='{msg}'");
+
+                double lum = DialogDetector.ProbeLum(bmp);
+                sb.AppendLine($"  probeLum={lum:0.0} open={DialogDetector.IsOpen(bmp)}");
+                var ctl = DialogDetector.FindControls(bmp);
+                sb.AppendLine(ctl == null ? "  visual controls=null" : $"  visual field={Fmt(ctl.Value.field, bmp)} confirm={Fmt(ctl.Value.confirm, bmp)}");
             }
         }
         catch (Exception ex) { sb.AppendLine("ERROR: " + ex); }

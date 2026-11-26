@@ -13,7 +13,7 @@
 2. Mở game, vào **Settings > Other** (thấy dòng *Exchange Code*).
 3. Bấm **Bắt đầu**. Lần đầu app tự nhận diện nút; nếu không thấy sẽ nhắc chọn tay bằng **F9**.
 
-Game nên để chế độ cửa sổ / borderless, ngôn ngữ tiếng Anh để OCR đọc được. Đổi kích thước cửa sổ thì bấm **Hiệu chỉnh nút** lại.
+Game nên để chế độ cửa sổ / borderless. Hỗ trợ game tiếng Anh và tiếng Việt. Đổi kích thước cửa sổ thì bấm **Hiệu chỉnh nút** lại.
 
 ## Lưu ý
 

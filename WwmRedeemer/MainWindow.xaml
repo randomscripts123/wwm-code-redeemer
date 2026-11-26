@@ -95,5 +95,22 @@
             <TextBlock x:Name="HintText" Foreground="{StaticResource Muted}" FontSize="12.5"
                        TextWrapping="Wrap" Margin="0,8,0,0"/>
         </StackPanel>
+
+        <!-- Canh bao lan dau (nam trong app, khong dung hop thoai he thong de khong bi an/chan ve giao dien) -->
+        <Border x:Name="WarnOverlay" Grid.Row="1" Grid.RowSpan="3" Visibility="Collapsed"
+                Background="#F20F1218" CornerRadius="12">
+            <Border MaxWidth="560" Margin="24" Padding="24" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Background="{StaticResource Card}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="12">
+                <StackPanel>
+                    <TextBlock x:Name="WarnTitle" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <TextBlock x:Name="WarnText" TextWrapping="Wrap" FontSize="13.5" LineHeight="21"
+                               Foreground="{StaticResource Text}" Margin="0,0,0,18"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="WarnExitBtn" Style="{StaticResource GhostBtn}" Click="WarnExit_Click"/>
+                        <Button x:Name="WarnOkBtn" Style="{StaticResource PrimaryBtn}" Click="WarnOk_Click" Margin="0,0,0,8"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Border>
     </Grid>
 </Window>

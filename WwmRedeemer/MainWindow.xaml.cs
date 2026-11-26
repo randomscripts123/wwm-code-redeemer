@@ -24,6 +24,10 @@ public class CodeItem : INotifyPropertyChanged
     public string StatusBrush => _key switch
     {
         "st_sent" => "#4FD1C5",
+        "st_used" => "#8B93A7",
+        "st_invalid" => "#F26B6B",
+        "st_expired" => "#E08A5B",
+        "st_failed" => "#F6A45F",
         "st_running" => "#F6C85F",
         "st_done" => "#6B7385",
         _ => "#A0A8BC"
@@ -44,6 +48,10 @@ public partial class MainWindow : Window
     private List<string> _apiCodes = new();
     private CancellationTokenSource? _cts;
     private bool _busy;
+    private readonly TaskCompletionSource<bool> _warnTcs = new();
+
+    private void WarnOk_Click(object sender, RoutedEventArgs e) => _warnTcs.TrySetResult(true);
+    private void WarnExit_Click(object sender, RoutedEventArgs e) => _warnTcs.TrySetResult(false);
 
     public MainWindow()
     {
@@ -54,16 +62,22 @@ public partial class MainWindow : Window
         ApplyLanguage();
         Loaded += async (_, _) =>
         {
+            Trace.Write("Loaded");
+            Activate();
             if (!_cfg.Accepted)
             {
-                var r = MessageBox.Show(L.Get("warn_text"), L.Get("warn_title"),
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (r != MessageBoxResult.Yes) { Close(); return; }
+                Trace.Write("Showing first-run warning overlay");
+                WarnOverlay.Visibility = Visibility.Visible;
+                bool ok = await _warnTcs.Task;
+                Trace.Write("Warning answer: " + ok);
+                if (!ok) { Close(); return; }
+                WarnOverlay.Visibility = Visibility.Collapsed;
                 _cfg.Accepted = true;
                 _cfg.Save();
             }
             Log(L.Get("log_start"));
             await RefreshCodesAsync();
+            Trace.Write("Codes loaded: " + _items.Count);
         };
         Closing += (_, _) => _cts?.Cancel();
     }
@@ -82,6 +96,10 @@ public partial class MainWindow : Window
         HdrCodes.Text = L.Get("hdr_codes");
         HdrLog.Text = L.Get("hdr_log");
         HintText.Text = L.Get("hint");
+        WarnTitle.Text = L.Get("warn_title");
+        WarnText.Text = L.Get("warn_text");
+        WarnOkBtn.Content = L.Get("warn_ok");
+        WarnExitBtn.Content = L.Get("warn_exit");
         LangBtn.Content = L.Lang == "vi" ? "VI | en" : "vi | EN";
         foreach (var it in _items) it.RefreshText();
         UpdateCount();
@@ -246,7 +264,7 @@ public partial class MainWindow : Window
         {
             var it = _items.FirstOrDefault(i => i.Code == code);
             if (it != null) it.StatusKey = key;
-            if (key == "st_sent") _hist.Add(code);
+            if (key == "st_sent" || key == "st_used") _hist.Add(code);
             UpdateCount();
         });
     }

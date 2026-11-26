@@ -3,3 +3,8 @@ obj/
 publish/
 *.user
 .vs/
+dist/
+test-pub/
+dist2/
+dist3/
+dist4/

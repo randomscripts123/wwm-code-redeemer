@@ -63,6 +63,24 @@ internal static class Native
         SendInput(1, i, Marshal.SizeOf<INPUT>());
     }
 
+    public const ushort ScanEsc = 0x01;
+
+    public static async Task TapAsync(ushort scan)
+    {
+        Key(scan, false); await Task.Delay(60);
+        Key(scan, true);
+    }
+
+    /// <summary>Ctrl+A de chon het chu trong o nhap, ma dan vao se ghi de chu cu.</summary>
+    public static async Task SelectAllAsync()
+    {
+        const ushort scanA = 0x1E;
+        Key(ScanCtrl, false); await Task.Delay(50);
+        Key(scanA, false); await Task.Delay(50);
+        Key(scanA, true); await Task.Delay(50);
+        Key(ScanCtrl, true);
+    }
+
     public static async Task CtrlVAsync()
     {
         Key(ScanCtrl, false); await Task.Delay(60);
