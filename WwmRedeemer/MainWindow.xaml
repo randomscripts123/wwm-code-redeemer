@@ -1,0 +1,99 @@
+<Window x:Class="WwmRedeemer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WWM Code Redeemer" Width="980" Height="680" MinWidth="860" MinHeight="560"
+        Background="{StaticResource Bg}" Foreground="{StaticResource Text}"
+        WindowStartupLocation="CenterScreen" FontFamily="Segoe UI">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tieu de -->
+        <Grid Grid.Row="0" Margin="0,0,0,14">
+            <StackPanel>
+                <TextBlock Text="WWM Code Redeemer" FontSize="24" FontWeight="SemiBold"/>
+                <TextBlock x:Name="SubText" Foreground="{StaticResource Muted}" FontSize="13" Margin="0,2,0,0"/>
+            </StackPanel>
+            <Button x:Name="LangBtn" Style="{StaticResource GhostBtn}" Content="VI | EN" Width="76"
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Click="Lang_Click"/>
+        </Grid>
+
+        <!-- Thanh nut -->
+        <WrapPanel Grid.Row="1" Margin="0,0,0,10">
+            <Button x:Name="StartBtn"   Style="{StaticResource PrimaryBtn}" Click="Start_Click"/>
+            <Button x:Name="StopBtn"    Style="{StaticResource DangerBtn}"  Click="Stop_Click" IsEnabled="False"/>
+            <Button x:Name="RefreshBtn" Style="{StaticResource GhostBtn}"   Click="Refresh_Click"/>
+            <Button x:Name="ImportBtn"  Style="{StaticResource GhostBtn}"   Click="Import_Click"/>
+            <Button x:Name="CalibBtn"   Style="{StaticResource GhostBtn}"   Click="Calib_Click"/>
+            <Button x:Name="ClearBtn"   Style="{StaticResource GhostBtn}"   Click="Clear_Click"/>
+        </WrapPanel>
+
+        <!-- Noi dung -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="340"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Danh sach ma -->
+            <Border Grid.Column="0" Background="{StaticResource Card}" BorderBrush="{StaticResource Line}"
+                    BorderThickness="1" CornerRadius="12" Padding="14">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock x:Name="HdrCodes" FontSize="15" FontWeight="SemiBold"/>
+                        <TextBlock x:Name="CountText" Foreground="{StaticResource Muted}" FontSize="12" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="CodeList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Code}" FontFamily="Consolas" FontSize="13" Padding="0,5"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding StatusText}" Foreground="{Binding StatusBrush}"
+                                                   FontSize="12" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Nhat ky -->
+            <Border Grid.Column="2" Background="{StaticResource Card}" BorderBrush="{StaticResource Line}"
+                    BorderThickness="1" CornerRadius="12" Padding="14">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="HdrLog" FontSize="15" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                    <TextBox x:Name="LogBox" Grid.Row="1" IsReadOnly="True" TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="12.5"
+                             Background="Transparent" BorderThickness="0" Foreground="{StaticResource Text}"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Tien do + goi y -->
+        <StackPanel Grid.Row="3" Margin="0,14,0,0">
+            <ProgressBar x:Name="Bar" Height="6" Minimum="0" Maximum="1" Value="0"
+                         Foreground="{StaticResource Accent}" Background="{StaticResource Line}" BorderThickness="0"/>
+            <TextBlock x:Name="HintText" Foreground="{StaticResource Muted}" FontSize="12.5"
+                       TextWrapping="Wrap" Margin="0,8,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
